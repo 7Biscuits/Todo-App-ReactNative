@@ -1,15 +1,38 @@
-import { StyleSheet, Text, View } from 'react-native';
-import Task from './components/Task';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+} from "react-native";
+import { useState } from "react";
+import Task from "./components/Task";
+import AddTask from "./components/AddTask";
 
 export default function App() {
+  const [taskItem, setTaskItem] = useState([]);
+
+  const handleNewTask = (task) => {
+    setTaskItem([...taskItem, task]);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.taskWrapper}>
-        <Text style={styles.title}>Your Tasks</Text>
-        <View style={styles.items}>
-          <Task text={"Hello, World"} />
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.taskWrapper}>
+          <Text style={styles.title}>Your Tasks</Text>
+          <View style={styles.items}>
+            {taskItem.map((item) => {
+              return <Task text={item} />;
+            })}
+          </View>
         </View>
-      </View>
+      </ScrollView>
+      <AddTask newTask={(task) => handleNewTask(task)} />
     </View>
   );
 }
@@ -17,7 +40,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8EAED',
+    backgroundColor: "#E8EAED",
   },
   taskWrapper: {
     paddingTop: 80,
@@ -29,5 +52,5 @@ const styles = StyleSheet.create({
   },
   items: {
     marginTop: 30,
-  }
+  },
 });
