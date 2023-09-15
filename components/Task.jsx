@@ -7,10 +7,6 @@ import {
 
 const Task = (props) => {
 
-  // const toggleTaskCompletion = () => {
-  //   props.toggleTaskCompleted();
-  // }
-
   return (
     <View>
       <TouchableOpacity onPress={() => props.toggleTaskCompleted()} onLongPress={() => props.deleteTask()}>
