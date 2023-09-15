@@ -14,7 +14,7 @@ const AddTask = (props) => {
 
   const addTask = (task) => {
     if (task == null) return;
-    props.newTask(task);
+    props.newTask({ task: task, completed: false });
   }
 
   return (
@@ -34,7 +34,7 @@ const AddTask = (props) => {
         setTask(null);
       }}>
         <View style={styles.addWrapper}>
-          <Text style={styles.addText}>+</Text>
+          <Text style={{color: "#FFF"}}>+</Text>
         </View>
       </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -62,12 +62,10 @@ const styles = StyleSheet.create({
   addWrapper: {
     width: 60,
     height: 60,
-    backgroundColor: "#FFF",
+    backgroundColor: "#AD03DE",
     borderRadius: 60,
     justifyContent: "center",
     alignItems: "center",
-    borderColor: "#C0C0C0",
-    borderWidth: 1,
   },
 });
 

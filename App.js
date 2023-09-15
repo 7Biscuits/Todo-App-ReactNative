@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView, Alert } from "react-native";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Header from "./components/Header";
 import Task from "./components/Task";
 import AddTask from "./components/AddTask";
 
@@ -18,7 +19,7 @@ export default function App() {
         setTaskItem(JSON.parse(savedTasks));
       }
     } catch (error) {
-      console.error("Error loading todos from AsyncStorage:", error);
+      Alert.alert("Error loading tasks from AsyncStorage:", error);
     }
   };
 
@@ -31,15 +32,47 @@ export default function App() {
     try {
       await AsyncStorage.setItem("tasks", JSON.stringify(task));
     } catch (error) {
-      console.error("Error saving todos to AsyncStorage:", error);
+      Alert.alert("Error saving tasks to AsyncStorage:", error);
     }
   };
 
-  const deleteTask = async (taskToDelete) => {
-    const updatedTaskItem = taskItem.filter((task) => task !== taskToDelete);
-    setTaskItem(updatedTaskItem);
-    saveTask(updatedTaskItem);
+  const deleteTask = async (index) => {
+    Alert.alert("Delete task", "Do you want to delete this task?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Yes",
+        onPress: () => {
+          const updatedTaskItem = [...taskItem];
+          updatedTaskItem.splice(index, 1);
+          setTaskItem(updatedTaskItem);
+          saveTask(updatedTaskItem);
+        },
+      },
+    ]);
   };
+
+  const clearTasks = () => {
+    if (taskItem.length == 0) {
+      Alert.alert("No tasks to clear", "You haven't added any task");
+      return;
+    }
+    Alert.alert("Clear all tasks", "Do you want to clear all tasks?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Yes",
+        onPress: () => {
+          setTaskItem([]);
+          saveTask([]);
+        },
+      },
+    ]);
+  }
 
   const toggleTaskCompletion = (index) => {
     const updatedTaskItem = [...taskItem];
@@ -57,7 +90,7 @@ export default function App() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.taskWrapper}>
-          <Text style={styles.title}>Your Tasks</Text>
+          <Header clearTasks={() => clearTasks()} />
           <View style={styles.items}>
             {taskItem.map((item, index) => {
               return (
@@ -66,6 +99,7 @@ export default function App() {
                   text={item.task}
                   toggleTaskCompleted={() => toggleTaskCompletion(index)}
                   taskCompleted={taskItem[index].completed}
+                  deleteTask={() => deleteTask(index)}
                 />
               );
             })}
@@ -80,7 +114,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8EAED",
+    backgroundColor: "#000",
   },
   taskWrapper: {
     paddingTop: 80,

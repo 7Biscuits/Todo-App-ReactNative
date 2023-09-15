@@ -4,20 +4,22 @@ import {
   View,
   TouchableOpacity
 } from "react-native";
-import { useState } from "react";
 
-const Task = ({ text }) => {
-  const [taskCompleted, setTaskCompleted] = useState(false);
+const Task = (props) => {
+
+  // const toggleTaskCompletion = () => {
+  //   props.toggleTaskCompleted();
+  // }
 
   return (
     <View>
-      <TouchableOpacity key={index} onPress={() => setTaskCompleted(!taskCompleted)}>
+      <TouchableOpacity onPress={() => props.toggleTaskCompleted()} onLongPress={() => props.deleteTask()}>
         <View style={styles.item}>
           <View style={styles.itemLeft}>
             <View style={styles.square}></View>
-            <Text style={styles.itemText}>{text}</Text>
+            <Text style={styles.itemText}>{props.text}</Text>
           </View>
-          <View style={taskCompleted ? styles.circularFilled : styles.circularEmpty}></View>
+          <View style={props.taskCompleted ? styles.circularFilled : styles.circularEmpty}></View>
         </View>
       </TouchableOpacity>
     </View>
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
   square: {
     width: 24,
     height: 24,
-    backgroundColor: "#55BCF6",
+    backgroundColor: "#AD03DE",
     opacity: 0.4,
     borderRadius: 5,
     marginRight: 15,
@@ -53,15 +55,15 @@ const styles = StyleSheet.create({
   circularEmpty: {
     width: 12,
     height: 12,
-    borderColor: "#55BCF6",
+    borderColor: "#AD03DE",
     borderWidth: 2,
     borderRadius: 5,
   },
   circularFilled: {
     width: 12,
     height: 12,
-    borderColor: "#55BCF6",
-    backgroundColor: "#55BCF6",
+    borderColor: "#AD03DE",
+    backgroundColor: "#AD03DE",
     borderWidth: 2,
     borderRadius: 5,
   }
